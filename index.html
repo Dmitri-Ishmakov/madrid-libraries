@@ -112,6 +112,8 @@
 
 
             function makeGeoJSON(csvData) {
+                console.log(csvData);
+                console.log("This was csvData");
                 csv2geojson.csv2geojson(csvData, {
                     latfield: 'Latitude',
                     lonfield: 'Longitude',
@@ -134,6 +136,7 @@
 
                         // When a click event occurs on a feature in the csvData layer, open a popup at the
                         // location of the feature, with description HTML from its properties.
+                        
                         map.on('click', 'csvData', function (e) {
                             var coordinates = e.features[0].geometry.coordinates.slice();
 
