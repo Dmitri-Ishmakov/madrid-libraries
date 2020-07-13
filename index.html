@@ -132,7 +132,7 @@
                 var marker = new mapboxgl.Marker({
                     color: 'purple'
                 })
-                    .setLngLat([-3.5, 40.4])
+                    .setLngLat([row.Longitude, row.Latitude])
                     .setPopup(popup)
                     .addTo(map); // add the marker to the map
 
