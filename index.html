@@ -95,7 +95,7 @@
         var map = new mapboxgl.Map({
             container: 'map', // container id
             style: 'mapbox://styles/mapbox/streets-v11', //stylesheet location
-            center: [-122.411464, 37.7852299], // starting position
+            center: [-3.7035825, 40.4167047], // starting position
             zoom: 10,// starting zoom
             transformRequest: transformRequest
         });
@@ -104,7 +104,7 @@
             $.ajax({
                 type: "GET",
                 //YOUR TURN: Replace with csv export link
-                url: '<Replace with csv export link>',
+                url: 'https://docs.google.com/spreadsheets/d/189TPl-Rxe2xxUw47DhL2IAUSx6HraT-Z1RY1IMsuzv4/gviz/tq?tqx=out:csv&sheet=Library-List',
                 dataType: "text",
                 success: function (csvData) { makeGeoJSON(csvData); }
             });
