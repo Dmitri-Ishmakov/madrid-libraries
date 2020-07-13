@@ -112,7 +112,6 @@
 
 
             function makeGeoJSON(csvData) {
-                console.log(csvData);
                 csv2geojson.csv2geojson(csvData, {
                     latfield: 'Latitude',
                     lonfield: 'Longitude',
@@ -132,7 +131,6 @@
                                 'circle-color': "purple"
                             }
                         });
-                   
 
                         // When a click event occurs on a feature in the csvData layer, open a popup at the
                         // location of the feature, with description HTML from its properties.
