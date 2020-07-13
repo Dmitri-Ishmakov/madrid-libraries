@@ -83,6 +83,7 @@
 
     <div id="map"></div>
     <script>
+        var layers = [];
         var transformRequest = (url, resourceType) => {
             var isMapboxRequest =
                 url.slice(8, 22) === "api.mapbox.com" ||
@@ -99,7 +100,7 @@
         var map = new mapboxgl.Map({
             container: 'map', // container id
             style: "mapbox://styles/mapbox/streets-v11", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-            center: [-122.411464, 37.7852299], // starting position [lng, lat]
+            center: [-3.5, 40.4], // starting position [lng, lat]
             zoom: 9, // starting zoom
             transformRequest: transformRequest
         });
@@ -124,19 +125,22 @@
 
                 // create a variable for your popup and populate your popup with information from your table
                 var popup = new mapboxgl.Popup()
-                    .setHTML(`<h3>` + row.Name + `</h3>` + '<h4>' + '<b>' + 'Address: ' + '</b>' + row.Address + '</h4>' + '<h4>' + '<b>' + 'Phone: ' + '</b>' + row.Phone + '</h4>'); // use the table to populate your popup with text
+                    .setHTML(`<h3>` + row.Name + `</h3>` + '<h4>' + '<b>' + 'Address: ' + '</b>' + row.Address + '</h4>'); // use the table to populate your popup with text
 
 
                 // create a variable for your markup and add it to the map 
                 var marker = new mapboxgl.Marker({
-                    color: 'purple'
+                    color: 'green'
                 })
                     .setLngLat([row.Longitude, row.Latitude])
                     .setPopup(popup)
                     .addTo(map); // add the marker to the map
 
-
+                if(!layers.includes(row.Municipality)){
+                    layers.push(row.Municipality);
+                }
             });
+            console.log(layers);
         }
 
     </script>
