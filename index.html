@@ -132,7 +132,7 @@
                             }
                         });
                     var layers = [];
-                    csvData.foreach(name => function(){
+                    csvData.foreach(function(name){
                         if(!layers.includes(name.features[0].properties.Library)){
                             layers.push(name.features[0].properties.Library);
                         }
