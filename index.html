@@ -10,6 +10,7 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js"></script>
     <link href="https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css" rel="stylesheet" />
     <script src='https://d3js.org/d3.v4.min.js'></script>
+    <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
     <link rel="stylesheet" href="style.css">
 
 </head>
@@ -77,54 +78,107 @@
     .mapboxgl-popup-anchor-top>.mapboxgl-popup-tip {
         border-bottom-color: rgb(61, 59, 59);
     }
-    #menu {
-        background: #fff;
+    .filter-group {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font-weight: 600;
         position: absolute;
-        z-index: 1;
         top: 10px;
         right: 10px;
+        z-index: 1;
         border-radius: 3px;
         width: 120px;
-        border: 1px solid rgba(0, 0, 0, 0.4);
-        font-family: 'Open Sans', sans-serif;
+        color: #fff;
     }
     
-    #menu a {
-        font-size: 13px;
-        color: #404040;
-        display: block;
-        margin: 0;
-        padding: 0;
-        padding: 10px;
-        text-decoration: none;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-        text-align: center;
+    .filter-group input[type='checkbox']:first-child + label {
+        -radius: 3px 3px 0 0;
     }
     
-    #menu a:last-child {
+    .filter-group label:last-child {
+        border-radius: 0 0 3px 3px;
         border: none;
     }
     
-    #menu a:hover {
-        background-color: #f8f8f8;
-        color: #404040;
+    .filter-group input[type='checkbox'] {
+        lay: none;
     }
     
-    #menu a.active {
-        background-color: #3887be;
-        color: #ffffff;
+    .filter-group input[type='checkbox'] + label {
+        background-color: #3386c0;
+        display: block;
+        cursor: pointer;
+        padding: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     }
     
-    #menu a.active:hover {
-    bac kground: #3074a4;
+    .filter-group input[type='checkbox'] + label {
+        background-color: #3386c0;
+        text-transform: capitalize;
+    }
+    
+    .filter-group input[type='checkbox'] + label:hover,
+    .filter-group input[type='checkbox']:checked + label {
+        round-color: #4ea0da;
+    }
+    
+    .filter-group input[type='checkbox']:checked + label:before {
+        content: '✔';
+        margin-right: 5px;
     }
 </style>
+<nav id="filter-group" class="filter-group"></nav>
+<div id="map"></div>
 
 <body>
 
-    <div id="map"></div>
     <script>
         var layers = [];
+        var places = {
+                "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "properties": { 
+                            'name': 'Biblioteca Pública Ana María Matute',
+                            'municipality': 'Carabanchel' 
+                            },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                -3.7201,
+                                40.3978
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": { 
+                            'name': 'Biblioteca Pública Luis Rosales',
+                            'municipality': 'Carabanchel' 
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                -3.7477,
+                                40.3735
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Feature",
+                        "properties": { 'name': 'Biblioteca Pública La Chata',
+                        'municipality': 'Carabanchel'
+                         },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                -3.7424,
+                                40.383
+                            ]
+                        }
+                    }
+                ]
+            }
         var transformRequest = (url, resourceType) => {
             var isMapboxRequest =
                 url.slice(8, 22) === "api.mapbox.com" ||
@@ -161,73 +215,38 @@
         function addPoints(data) {
 
             // iterate through your table to set the marker to lat/long values for each row
+            console.log(csvJSON(data));
 
-            data.forEach(function (row) {
-
-                // create a variable for your popup and populate your popup with information from your table
-                var popup = new mapboxgl.Popup()
-                    .setHTML(`<h3>` + row.Name + `</h3>` + '<h4>' + '<b>' + 'Address: ' + '</b>' + row.Address + '</h4>'); // use the table to populate your popup with text
-
-
-                // create a variable for your markup and add it to the map 
-                var marker = new mapboxgl.Marker({
-                    color: 'purple'
-                })
-                    .setLngLat([row.Longitude, row.Latitude])
-                    .setPopup(popup)
-                    .addTo(map); // add the marker to the map
-
-                if(!layers.includes(row.Municipality)){
-                    layers.push(row.Municipality);
-                    map.addSource(row.Municipality, {
-                        type: 'vector',
-                        url: 'mapbox://mapbox.2opop9hr'
-                    });
-                    map.addLayer({
-                        'id': row.Municipality,
-                        'type': 'circle',
-                        'source': row.Municipality,
-                        'layout': {
-                            'visibility': 'visible'
-                        },
-                        'paint': {
-                            'circle-radius': 8,
-                            'circle-color': 'rgba(55,148,179,1)'
-                        },
-                        'source-layer': 'museum-cusco'
-                    });
-                }
-            });
-            for (var i = 0; i < layers.length; i++) {
-                var id = layers[i];
-
-                var link = document.createElement('a');
-                link.href = '#';
-                link.className = 'active';
-                link.textContent = id;
-
-                link.onclick = function (e) {
-                    var clickedLayer = this.textContent;
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
-
-                    // toggle layer visibility by changing the layout object's visibility property
-                    if (visibility === 'visible') {
-                        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-                        this.className = '';
-                    } else {
-                        this.className = 'active';
-                        map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
-                    }
-                };
-
-                var newlayers = document.getElementById('menu');
-                newlayers.appendChild(link);
-            }
-            console.log(layers);
         }
+
+        function csvJSON(csv) {
+
+                var lines = csv.split("\n");
+
+                var result = [];
+
+                // NOTE: If your columns contain commas in their values, you'll need
+                // to deal with those before doing the next step 
+                // (you might convert them to &&& or something, then covert them back later)
+                // jsfiddle showing the issue https://jsfiddle.net/
+                var headers = lines[0].split(",");
+
+                for (var i = 1; i < lines.length; i++) {
+
+                    var obj = {};
+                    var currentline = lines[i].split(",");
+
+                    for (var j = 0; j < headers.length; j++) {
+                        obj[headers[j]] = currentline[j];
+                    }
+
+                    result.push(obj);
+
+                }
+
+                //return result; //JavaScript object
+                return JSON.stringify(result); //JSON
+            }
 
     </script>
 </body>
