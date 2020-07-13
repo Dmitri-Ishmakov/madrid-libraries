@@ -132,11 +132,12 @@
                             }
                         });
                     var layers = [];
-                    foreach(name in csvData){
+                    csvData.foreach(name => function(){
                         if(!layers.includes(name.features[0].properties.Library)){
                             layers.push(name.features[0].properties.Library);
                         }
-                    }
+                    });
+                    
                     map.addLayer(layers);
 
                         // When a click event occurs on a feature in the csvData layer, open a popup at the
