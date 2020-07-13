@@ -118,7 +118,7 @@
                     delimiter: ','
                 }, function (err, data) {
                     map.on('load', function () {
-                        console.log(data);
+                        console.log(data.Name);
                         //Add the the layer to the map 
                         map.addLayer({
                             'id': 'csvData',
