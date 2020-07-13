@@ -100,7 +100,7 @@
         var map = new mapboxgl.Map({
             container: 'map', // container id
             style: "mapbox://styles/mapbox/streets-v11", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-            center: [Number(-3.5), Number(40.4)], // starting position [lng, lat]
+            center: [-3.5, 40.4], // starting position [lng, lat]
             zoom: 9, // starting zoom
             transformRequest: transformRequest
         });
@@ -132,13 +132,11 @@
                 var marker = new mapboxgl.Marker({
                     color: 'purple'
                 })
-                    .setLngLat([Number(row.Longitude), Number(row.Latitude)])
+                    .setLngLat([row.Longitude, row.Latitude])
                     .setPopup(popup)
                     .addTo(map); // add the marker to the map
 
-                if(!layers.includes(row.Municipality)){
-                    layers.push(row.Municipality);
-                }
+                
             });
             console.log(layers);
         }
