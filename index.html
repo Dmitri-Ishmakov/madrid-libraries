@@ -172,7 +172,7 @@
                 console.log("Trying to use geoJSON");
                 map.addSource('places', {
                     'type': 'geojson',
-                    'data': geoJSON
+                    'data': JSON.stringify(geoJSON)
                 });
                 geoJSON.features.forEach(function (feature) {
                     var symbol = feature.properties['municipality'];
