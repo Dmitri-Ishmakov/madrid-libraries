@@ -344,7 +344,7 @@
 
                 geoJSON["\"features\""] = theCollection;
                 console.log("geoJSON ready to use!");
-                return geoJSON;
+                return new Promise(resolve => resolve(geoJSON));
             }
     </script>
 </body>
