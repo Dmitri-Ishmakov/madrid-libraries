@@ -297,7 +297,28 @@
             function init() {
                 d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addPoints);
             }
+            map.on('click', 'csvData', function (e) {
+                    var coordinates = e.features[0].geometry.coordinates.slice();
 
+                    //set popup text 
+                    //You can adjust the values of the popup to match the headers of your CSV. 
+                    // For example: e.features[0].properties.Name is retrieving information from the field Name in the original CSV. 
+                    var description = '<h3>' + e.features[0].properties.Name + '</h3>' + '<h4>' + '<b>' + 'Address: ' + '</b>' + e.features[0].properties.Address + '</h4>';
+
+                    // Ensure that if the map is zoomed out such that multiple
+                    // copies of the feature are visible, the popup appears
+                    // over the copy being pointed to.
+                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                    }
+
+                    //add Popup to map
+
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates)
+                        .setHTML(description)
+                        .addTo(map);
+                });
 
             // create a function called addPoints that iterates through your table (row by row) to create markers and popups
             function addPoints(data) {
