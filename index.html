@@ -261,21 +261,21 @@
                 var theCollection = [];
                 data.forEach(function (row) {
                     var obj = {
-                        "'type'": 'Feature',
-                        "'properties'": {
-                            "'name'": row.Name,
-                            "'address'": row.Address,
-                            "'municipality'": row.Municipality
+                        "\"type\"": "Feature",
+                        "\"properties\"": {
+                            "\"name\"": row.Name,
+                            "\"address\"": row.Address,
+                            "\"municipality\"": row.Municipality
                         },
-                        "'geometry'": {
-                            "'type'": 'Point',
-                            "'coordinates'": [Number(row.Longitude), Number(row.Latitude)]
+                        "\"geometry\"": {
+                            "\"type\"": "Point",
+                            "\"coordinates\"": [Number(row.Longitude), Number(row.Latitude)]
                         }
                     }
                     theCollection.push(obj);
                 })
 
-                geoJSON["'features'"] = theCollection;
+                geoJSON["\"features\""] = theCollection;
                 console.log(geoJSON);
             }
     </script>
