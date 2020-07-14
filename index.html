@@ -257,11 +257,14 @@
                             'id': layerID,
                             'type': 'circle',
                             'source': 'places',
+                            'layout': {
+                                // make layer visible by default
+                                'visibility': 'visible'
+                            },
                             'paint': {
                                 'circle-radius': 8,
                                 'circle-color': 'rgba(55,148,179,1)'
-                            },
-                            'filter': ['==', 'icon', symbol]
+                            }
                         });
 
                         // Add checkbox and label elements for the layer.
