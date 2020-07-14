@@ -69,7 +69,7 @@
                     var layerID = 'poi-' + symbol;
                     map.on('click', layerID, function (e) {
                     var coordinates = e.features[0].geometry.coordinates.slice();
-                    var description = e.features[0].properties.description;
+                    var name = e.features[0].properties.name;
                     
                     // Ensure that if the map is zoomed out such that multiple
                     // copies of the feature are visible, the popup appears
@@ -80,7 +80,7 @@
                     
                     new mapboxgl.Popup()
                     .setLngLat(coordinates)
-                    .setHTML(description)
+                    .setHTML(name)
                     .addTo(map);
                     });
 
