@@ -134,52 +134,7 @@
     <script>
         var layers = [];
         var filterGroup = document.getElementById('filter-group');
-        var places = {
-                "type": "FeatureCollection",
-                "features": [
-                    {
-                        "type": "Feature",
-                        "properties": { 
-                            'name': 'Biblioteca Pública Ana María Matute',
-                            'municipality': 'Carabanchel' 
-                            },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [
-                                -3.7201,
-                                40.3978
-                            ]
-                        }
-                    },
-                    {
-                        "type": "Feature",
-                        "properties": { 
-                            'name': 'Biblioteca Pública Luis Rosales',
-                            'municipality': 'Carabanchel' 
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [
-                                -3.7477,
-                                40.3735
-                            ]
-                        }
-                    },
-                    {
-                        "type": "Feature",
-                        "properties": { 'name': 'Biblioteca Pública La Chata',
-                        'municipality': 'Carabanchel'
-                         },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [
-                                -3.7424,
-                                40.383
-                            ]
-                        }
-                    }
-                ]
-            }
+        var geoJSON = {'"type"': 'FeatureCollection'}
            
             var transformRequest = (url, resourceType) => {
                 var isMapboxRequest =
@@ -194,9 +149,7 @@
 
             //YOUR TURN: add your Mapbox access token 
             mapboxgl.accessToken = 'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA'
-            var geoJSON = {
-                '"type"': 'FeatureCollection'
-            }
+            
             var map = new mapboxgl.Map({
                 container: 'map', // container id
                 style: "mapbox://styles/mapbox/streets-v11", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
@@ -208,6 +161,7 @@
 
             map.on("load", function () {
                 init();
+                console.log(geoJSON.toJSON());
                 map.addSource('places', {
                     'type': 'geojson',
                     'data': geoJSON
@@ -277,7 +231,7 @@
                 })
 
                 geoJSON["\"features\""] = theCollection;
-                console.log(geoJSON);
+                return geoJSON;
             }
     </script>
 </body>
