@@ -242,7 +242,7 @@
 
             map.on("load", async function () {
                 const result = await init();
-                console.log("trying to use geoJSON");
+                console.log(result);
                 map.addSource('places', {
                     'type': 'geojson',
                     'data': result
