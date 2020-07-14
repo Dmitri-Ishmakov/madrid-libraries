@@ -240,8 +240,8 @@
             });
 
 
-            map.on("load", function () {
-                init();
+            map.on("load", async function () {
+                const result = await init();
                 console.log("trying to use geoJSON");
                 map.addSource('places', {
                     'type': 'geojson',
@@ -291,6 +291,7 @@
                     }
 
                 });
+                
             });
 
             // Initialize D3 to access your table
