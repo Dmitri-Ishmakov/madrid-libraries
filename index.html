@@ -56,13 +56,14 @@
                 init();
                 var delayInMilliseconds = 1000; //1 second
 
-                setTimeout(function () {/**
+                setTimeout(function () {
                     //your code to be executed after 1 second
                 
                 map.addSource('places', {
                     'type': 'geojson',
                     'data': geoJSONstr
                 });
+                /**
                 geoJSON.features.forEach(function (feature) {
                     var symbol = feature.properties['municipality'];
                     var layerID = 'poi-' + symbol;
