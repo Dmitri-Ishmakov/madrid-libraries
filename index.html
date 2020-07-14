@@ -161,7 +161,7 @@
 
             map.on("load", function () {
                 init();
-                console.log(geoJSON.toJSON());
+                console.log(geoJSON);
                 map.addSource('places', {
                     'type': 'geojson',
                     'data': geoJSON
