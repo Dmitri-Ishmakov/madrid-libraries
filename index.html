@@ -240,12 +240,17 @@
             });
 
 
-            map.on("load", async function () {
-                const result = await init();
-                console.log(result);
+            map.on("load",  function () {
+                init();
+                var delayInMilliseconds = 1000; //1 second
+
+                setTimeout(function () {
+                    //your code to be executed after 1 second
+                
+                console.log("Trying to use geoJSON");
                 map.addSource('places', {
                     'type': 'geojson',
-                    'data': result
+                    'data': geoJSON
                 });
                 geoJSON.features.forEach(function (feature) {
                     var symbol = feature.properties['municipality'];
@@ -291,12 +296,12 @@
                     }
 
                 });
-                
+                }, delayInMilliseconds);
             });
 
             // Initialize D3 to access your table
             function init() {
-                return Promise(resolve => resolve(d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addPoints)));
+                d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addPoints);
             }
             map.on('click', 'places', function (e) {
                 console.log("I clicked!");
