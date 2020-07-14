@@ -117,6 +117,10 @@
             function init() {
                 d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addPoints);
             }
+
+            map.on('click', 'places', function(){
+                console.log("click");
+            });
             
 
             // create a function called addPoints that iterates through your table (row by row) to create markers and popups
