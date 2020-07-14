@@ -137,6 +137,7 @@
         var geoJSON = {
                 "type": "FeatureCollection"
             }
+        var geoJSONstr;
 
            
             var transformRequest = (url, resourceType) => {
@@ -171,9 +172,8 @@
                 
                 map.addSource('places', {
                     'type': 'geojson',
-                    'data': geoJSON
+                    'data': geoJSONstr
                 });
-                console.log(geoJSON.features);
                 geoJSON.features.forEach(function (feature) {
                     var symbol = feature.properties['municipality'];
                     var layerID = 'poi-' + symbol;
@@ -270,7 +270,7 @@
                 })
 
                 geoJSON["features"] = theCollection;
-                geoJSON = JSON.stringify(geoJSON);
+                geoJSONstr = JSON.stringify(geoJSON);
             }
     </script>
 </body>
