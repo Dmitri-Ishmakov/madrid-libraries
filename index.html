@@ -134,7 +134,88 @@
     <script>
         var layers = [];
         var filterGroup = document.getElementById('filter-group');
-        var geoJSON = {'"type"': 'FeatureCollection'}
+        var geoJSON = {
+                "features": [{
+                    "geometry": {
+                        "coordinates": [-3.7078, 40.4003],
+                        "type": "Point"
+                    },
+                    "properties": {
+                        "address": "Calle de Arganda, 12, 28005 Madrid, Spain",
+                        "municipality": "Arganzuela",
+                        "name": "Biblioteca Pública Pío Baroja"
+                    },
+                    "type": "Feature"
+                }, {
+                    "geometry": {
+                        "coordinates": [-3.5938, 40.4608],
+                        "type": "Point"
+                    },
+                    "properties": {
+                        "address": "Av. de Logroño, 179, 28042 Madrid, Spain",
+                        "municipality": "Barajas",
+                        "name": "Biblioteca Pública Barajas Gloria Fuertes"
+                    },
+                    "type": "Feature"
+                }, {
+                    "geometry": {
+                        "coordinates": [-3.7201, 40.3978],
+                        "type": "Point"
+                    },
+                    "properties": {
+                        "address": "Calle Cortada, 1, 28019 Madrid, Spain",
+                        "municipality": "Carabanchel",
+                        "name": "Biblioteca Pública Ana María Matute"
+                    },
+                    "type": "Feature"
+                }, {
+                    "geometry": {
+                        "coordinates": [-3.7477, 40.3735],
+                        "type": "Point"
+                    },
+                    "properties": {
+                        "address": "Calle de Antonia Rodríguez Sacristán, 7, 9, 28044 Madrid, Spain",
+                        "municipality": "Carabanchel",
+                        "name": "Biblioteca Pública Luis Rosales"
+                    },
+                    "type": "Feature"
+                }, {
+                    "geometry": {
+                        "coordinates": [-3.7424, 40.383],
+                        "type": "Point"
+                    },
+                    "properties": {
+                        "address": "Calle del Gral. Ricardos, 252, 28025 Madrid, Spain",
+                        "municipality": "Carabanchel",
+                        "name": "Biblioteca Pública La Chata"
+                    },
+                    "type": "Feature"
+                }, {
+                    "geometry": {
+                        "coordinates": [-3.7112, 40.4279],
+                        "type": "Point"
+                    },
+                    "properties": {
+                        "address": "Calle del Conde Duque, 9, 11, 28015 Madrid, Spain",
+                        "municipality": "Centro",
+                        "name": "Biblioteca Pública Benito Pérez Galdós"
+                    },
+                    "type": "Feature"
+                }, {
+                    "geometry": {
+                        "coordinates": [-3.7097, 40.414],
+                        "type": "Point"
+                    },
+                    "properties": {
+                        "address": "Calle de San Justo, 5, 28005 Madrid, Spain",
+                        "municipality": "Centro",
+                        "name": "Biblioteca Pública Iván de Vargas"
+                    },
+                    "type": "Feature"
+                }],
+                "type": "FeatureCollection"
+            }
+
            
             var transformRequest = (url, resourceType) => {
                 var isMapboxRequest =
