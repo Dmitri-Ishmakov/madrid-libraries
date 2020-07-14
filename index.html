@@ -247,7 +247,7 @@
                     'type': 'geojson',
                     'data': geoJSON
                 });
-                places.features.forEach(function (feature) {
+                geoJSON.features.forEach(function (feature) {
                     var symbol = feature.properties['municipality'];
                     var layerID = 'poi-' + symbol;
 
