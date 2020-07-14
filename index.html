@@ -79,46 +79,46 @@
         border-bottom-color: rgb(61, 59, 59);
     }
     .filter-group {
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        font-weight: 600;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 1;
-        border-radius: 3px;
-        width: 120px;
-        color: #fff;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    border-radius: 3px;
+    width: 120px;
+    color: #fff;
     }
     
     .filter-group input[type='checkbox']:first-child + label {
-        -radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
     }
     
     .filter-group label:last-child {
-        border-radius: 0 0 3px 3px;
-        border: none;
+    border-radius: 0 0 3px 3px;
+    border: none;
     }
     
     .filter-group input[type='checkbox'] {
-        lay: none;
+    display: none;
     }
     
     .filter-group input[type='checkbox'] + label {
-        background-color: #3386c0;
-        display: block;
-        cursor: pointer;
-        padding: 10px;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    background-color: #3386c0;
+    display: block;
+    cursor: pointer;
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
     }
     
     .filter-group input[type='checkbox'] + label {
-        background-color: #3386c0;
-        text-transform: capitalize;
+    background-color: #3386c0;
+    text-transform: capitalize;
     }
     
     .filter-group input[type='checkbox'] + label:hover,
     .filter-group input[type='checkbox']:checked + label {
-        round-color: #4ea0da;
+    background-color: #4ea0da;
     }
     
     .filter-group input[type='checkbox']:checked + label:before {
@@ -126,7 +126,7 @@
         margin-right: 5px;
     }
 </style>
-<nav id="filter-group" class="filter-group"></nav>
+<nav id="menu"></nav>
 <div id="map"></div>
 
 <body>
@@ -179,75 +179,105 @@
                     }
                 ]
             }
-        var transformRequest = (url, resourceType) => {
-            var isMapboxRequest =
-                url.slice(8, 22) === "api.mapbox.com" ||
-                url.slice(10, 26) === "tiles.mapbox.com";
-            return {
-                url: isMapboxRequest
-                    ? url.replace("?", "?pluginName=sheetMapper&")
-                    : url
+           
+            var transformRequest = (url, resourceType) => {
+                var isMapboxRequest =
+                    url.slice(8, 22) === "api.mapbox.com" ||
+                    url.slice(10, 26) === "tiles.mapbox.com";
+                return {
+                    url: isMapboxRequest
+                        ? url.replace("?", "?pluginName=sheetMapper&")
+                        : url
+                };
             };
-        };
 
-        //YOUR TURN: add your Mapbox access token 
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA'
-        var map = new mapboxgl.Map({
-            container: 'map', // container id
-            style: "mapbox://styles/mapbox/streets-v11", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-            center: [-3.5, 40.4], // starting position [lng, lat]
-            zoom: 9, // starting zoom
-            transformRequest: transformRequest
-        });
-
-
-        map.on("load", function () {
-            init();
-        });
-
-        // Initialize D3 to access your table
-        function init() {
-            d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addPoints);
-        }
+            //YOUR TURN: add your Mapbox access token 
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA'
+            var geoJSON = {
+                '"type"': 'FeatureCollection'
+            }
+            var map = new mapboxgl.Map({
+                container: 'map', // container id
+                style: "mapbox://styles/mapbox/streets-v11", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
+                center: [-3.5, 40.4], // starting position [lng, lat]
+                zoom: 9, // starting zoom
+                transformRequest: transformRequest
+            });
 
 
-        // create a function called addPoints that iterates through your table (row by row) to create markers and popups
-        function addPoints(data) {
+            map.on("load", function () {
+                init();
+                map.addSource('places', {
+                    'type': 'geojson',
+                    'data': geoJSON
+                });
+                places.features.forEach(function (feature) {
+                    var symbol = feature.properties['municipality'];
+                    var layerID = 'poi-' + symbol;
 
-            // iterate through your table to set the marker to lat/long values for each row
-            console.log(csvJSON(data));
+                    // Add a layer for this symbol type if it hasn't been added already.
+                    if (!map.getLayer(layerID)) {
+                        map.addLayer({
+                            'id': layerID,
+                            'type': 'circle',
+                            'source': 'places',
+                            'filter': ['==', 'icon', symbol]
+                        });
 
-        }
+                        // Add checkbox and label elements for the layer.
+                        var input = document.createElement('input');
+                        input.type = 'checkbox';
+                        input.id = layerID;
+                        input.checked = true;
+                        filterGroup.appendChild(input);
 
-        function csvJSON(csv) {
+                        var label = document.createElement('label');
+                        label.setAttribute('for', layerID);
+                        label.textContent = symbol;
+                        filterGroup.appendChild(label);
 
-                var lines = csv.split("\n");
-
-                var result = [];
-
-                // NOTE: If your columns contain commas in their values, you'll need
-                // to deal with those before doing the next step 
-                // (you might convert them to &&& or something, then covert them back later)
-                // jsfiddle showing the issue https://jsfiddle.net/
-                var headers = lines[0].split(",");
-
-                for (var i = 1; i < lines.length; i++) {
-
-                    var obj = {};
-                    var currentline = lines[i].split(",");
-
-                    for (var j = 0; j < headers.length; j++) {
-                        obj[headers[j]] = currentline[j];
+                        // When the checkbox changes, update the visibility of the layer.
+                        input.addEventListener('change', function (e) {
+                            map.setLayoutProperty(
+                                layerID,
+                                'visibility',
+                                e.target.checked ? 'visible' : 'none'
+                            );
+                        });
                     }
 
-                    result.push(obj);
+                });
+            });
 
-                }
-
-                //return result; //JavaScript object
-                return JSON.stringify(result); //JSON
+            // Initialize D3 to access your table
+            function init() {
+                d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addPoints);
             }
 
+
+            // create a function called addPoints that iterates through your table (row by row) to create markers and popups
+            function addPoints(data) {
+                // iterate through your table to create a geojson from each
+                var theCollection = [];
+                data.forEach(function (row) {
+                    var obj = {
+                        "'type'": 'Feature',
+                        "'properties'": {
+                            "'name'": row.Name,
+                            "'address'": row.Address,
+                            "'municipality'": row.Municipality
+                        },
+                        "'geometry'": {
+                            "'type'": 'Point',
+                            "'coordinates'": [Number(row.Longitude), Number(row.Latitude)]
+                        }
+                    }
+                    theCollection.push(obj);
+                })
+
+                geoJSON["'features'"] = theCollection;
+                console.log(geoJSON);
+            }
     </script>
 </body>
 
