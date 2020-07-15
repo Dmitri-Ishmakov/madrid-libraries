@@ -127,7 +127,10 @@
                                 e.target.checked ? 'none' : 'visible'
                             );
                             // remove the unchecked layer from layerIDs
-                            var i = layerIDs.findIndex(layerID);
+                            var i;
+                            if(layerIDs.findIndex(layerID)){
+                                i = layerIDs.findIndex(layerID);
+                            }
                             e.target.checked ? layerIDs.splice(i, 1) : layerIDs.push(layerID);
                             console.log(layerIDs);
                         });
