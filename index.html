@@ -97,7 +97,7 @@
                             'source': 'places',
                             'layout': {
                                 // make layer visible by default
-                                'visibility': 'visible'
+                                'visibility': 'none'
                             },
                             'paint': {
                                 'circle-radius': 9,
@@ -111,7 +111,7 @@
                         var input = document.createElement('input');
                         input.type = 'checkbox';
                         input.id = layerID;
-                        input.checked = true;
+                        input.checked = false;
                         filterGroup.appendChild(input);
 
                         var label = document.createElement('label');
@@ -124,12 +124,12 @@
                             map.setLayoutProperty(
                                 layerID,
                                 'visibility',
-                                e.target.checked ? 'visible' : 'none'
+                                e.target.checked ? 'none' : 'visible'
                             );
-                            console.log("Filter is " + map.getFilter(
-                                layerID,
-                                'filter'
-                            ));
+                            // remove the unchecked layer from layerIDs
+                            var i = layerIDs.findIndex(layerID);
+                            e.target.checked ? layerIDs.splice(i, 1) : layerIDs.push(layerID);
+                            console.log(layerIDs);
                         });
                     }
                 });
