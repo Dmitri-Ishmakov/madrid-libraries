@@ -23,6 +23,7 @@
     <script>
         //Go ahead and grab the location of the search box
         var filterGroup = document.getElementById('filter-group');
+        var layerIDs = [];
         //Initialize the geoJSON as a type FeatureCollection so I can add features to it
         var geoJSON = {
                 "type": "FeatureCollection"
@@ -69,6 +70,7 @@
                     //set symbol to whatever property I'm sorting by. Later should be able to sort by multiple properties at once
                     var symbol = feature.properties['municipality'];
                     var layerID = 'poi-' + symbol;
+                    layerIDs.push(layerID);
                     map.on('click', layerID, function (e) {
                     var coordinates = e.features[0].geometry.coordinates.slice();
                     var name = e.features[0].properties.name;
@@ -124,11 +126,15 @@
                                 'visibility',
                                 e.target.checked ? 'visible' : 'none'
                             );
+                            console.log("layout property is " + map.getLayoutProperty(
+                                layerID,
+                                'filter'
+                            ));
                         });
                     }
                 });
                 }, delayInMilliseconds);
-                var layers = console.log(map.getStyle().layers);
+                
             });
 
             // Initialize D3 to access your table
