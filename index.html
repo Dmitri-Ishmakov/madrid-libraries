@@ -21,12 +21,12 @@
 <body>
 
     <script>
-        var layers = [];
+        //Go ahead and grab the location of the search box
         var filterGroup = document.getElementById('filter-group');
+        //Initialize the geoJSON as a type FeatureCollection so I can add features to it
         var geoJSON = {
                 "type": "FeatureCollection"
             }
-        var geoJSONstr;
 
            
             var transformRequest = (url, resourceType) => {
@@ -40,13 +40,14 @@
                 };
             };
 
-            //YOUR TURN: add your Mapbox access token 
+            //MAPBOXTOKEN REMOVE BEFORE PUBLISHING
             mapboxgl.accessToken = 'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA'
             
+            //initialize the map
             var map = new mapboxgl.Map({
                 container: 'map', // container id
-                style: "mapbox://styles/mapbox/streets-v11", //YOUR TURN: choose a style: https://docs.mapbox.com/api/maps/#styles
-                center: [-3.5, 40.4], // starting position [lng, lat]
+                style: "mapbox://styles/mapbox/streets-v11", //Choose a style: https://docs.mapbox.com/api/maps/#styles
+                center: [-3.5, 40.4], // starting position [lng, lat] set at Madrid currently
                 zoom: 9, // starting zoom
                 transformRequest: transformRequest
             });
@@ -54,17 +55,18 @@
 
             map.on("load",  function () {
                 init();
-                var delayInMilliseconds = 1000; //1 second
+                var delayInMilliseconds = 1000; //Delay to allow the geoJSON to be populated. Fix by using Promises or an await in future build
 
                 setTimeout(function () {
-                    //your code to be executed after 1 second
                 
                 map.addSource('places', {
                     'type': 'geojson',
                     'data': geoJSON
                 });
                 
+                //Loop through the geoJSON adding each one to my map
                 geoJSON.features.forEach(function (feature) {
+                    //set symbol to whatever property I'm sorting by. Later should be able to sort by multiple properties at once
                     var symbol = feature.properties['municipality'];
                     var layerID = 'poi-' + symbol;
                     map.on('click', layerID, function (e) {
@@ -78,13 +80,14 @@
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
                     
+                    //Add a popup for each point.
                     new mapboxgl.Popup()
                     .setLngLat(coordinates)
                     .setHTML(name)
                     .addTo(map);
                     });
 
-                    // Add a layer for this symbol type if it hasn't been added already.
+                    // Add a layer for this symbol type if it hasn't been added already. This is what actually does the filtering
                     if (!map.getLayer(layerID)) {
                         map.addLayer({
                             'id': layerID,
@@ -98,6 +101,7 @@
                                 'circle-radius': 9,
                                 'circle-color': 'purple'
                             },
+                            //change the filter to whatever searching by
                             'filter': ['==', 'municipality', symbol]
                         });
 
@@ -124,6 +128,7 @@
                     }
                 });
                 }, delayInMilliseconds);
+                var layers = console.logs(map.getStyle().layers);
             });
 
             // Initialize D3 to access your table
@@ -134,9 +139,8 @@
             
             
 
-            // create a function called addPoints that iterates through your table (row by row) to create markers and popups
+            // create a function called addPoints that iterates through your table (row by row) to create the geoJSON
             function addPoints(data) {
-                // iterate through your table to create a geojson from each
                 var theCollection = [];
                 data.forEach(function (row) {
                     var obj = {
@@ -155,7 +159,6 @@
                 })
 
                 geoJSON["features"] = theCollection;
-                geoJSONstr = JSON.stringify(geoJSON);
             }
     </script>
 </body>
