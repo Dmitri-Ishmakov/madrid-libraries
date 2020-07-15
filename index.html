@@ -126,12 +126,14 @@
                                 'visibility',
                                 e.target.checked ? 'visible' : 'none'
                             );
+                            var j;
                             // remove the unchecked layer from layerIDs
-                            var i;
-                            if(layerIDs.findIndex(layerID)){
-                                i = layerIDs.findIndex(layerID);
+                            for(var i = 0; i < layerIDs.length; i++){
+                                if(layerIDs[i] == layerID){
+                                    j = i;
+                                }
                             }
-                            e.target.checked ? layerIDs.splice(i, 1) : layerIDs.push(layerID);
+                            e.target.checked ? layerIDs.splice(j, 1) : layerIDs.push(layerID);
                             console.log(layerIDs);
                         });
                     }
