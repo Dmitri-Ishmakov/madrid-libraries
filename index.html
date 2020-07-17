@@ -168,7 +168,7 @@
                     theCollection[row.Name] = obj;
                 })
                 for(var key in theCollection){
-                    theCollection.push(thegeoJSONCollection[key]);
+                    thegeoJSONCollection.push(theCollection[key]);
                 }
                 geoJSON["features"] = thegeoJSONCollection;
             }
