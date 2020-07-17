@@ -66,13 +66,13 @@
                 
                 map.addSource('places', {
                     'type': 'geojson',
-                    'data': geoJSON
+                    'data': geoJSONBooks
                 });
                 
                 //Loop through the geoJSON adding each one to my map
-                geoJSON.features.forEach(function (feature) {
+                geoJSONBooks.features.forEach(function (feature) {
                     //set symbol to whatever property I'm sorting by. Later should be able to sort by multiple properties at once
-                    var symbol = feature.properties['municipality'];
+                    var symbol = feature.properties['library'];
                     var layerID = 'poi-' + symbol;
                     map.on('click', layerID, function (e) {
                     var coordinates = e.features[0].geometry.coordinates.slice();
@@ -107,7 +107,7 @@
                                 'circle-color': 'purple'
                             },
                             //change the filter to whatever searching by
-                            'filter': ['==', 'municipality', symbol]
+                            'filter': ['==', 'library', symbol]
                         });
 
                         // Add checkbox and label elements for the layer.
@@ -183,7 +183,6 @@
             function addPoints(data) {
                 var theNewCollection = [];
                 //so go ahead and loop through each row
-                console.log("The Collection is " , theCollection)
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
                     rowLibraries.forEach(function (libs){
@@ -208,7 +207,7 @@
                                 "library": libs,
                                 "class": "book"
                             },
-                            "geometry": JSON.stringify(theCollection[libs])
+                            "geometry": theCollection[libs].geometry
                         }
                         theNewCollection.push(obj);
                         }
