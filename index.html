@@ -185,7 +185,7 @@
                 var theNewCollection = [];
                 //so go ahead and loop through each row
                 data.forEach(function (row) {
-                    var rowLibraries = row.Libraries.split("///");
+                    var rowLibraries = row.Libraries.split("/// ");
                     console.log(rowLibraries);
                     rowLibraries.forEach(function (libs){
                         if(theCollection[libs]){
