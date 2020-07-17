@@ -181,10 +181,11 @@
             function addPoints(data) {
                 var theNewCollection = [];
                 //so go ahead and loop through each row
+                console.log("The Collection is " , theCollection)
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
                     rowLibraries.forEach(function (libs){
-                        console.log("geometry should be " + String(theCollection[libs]));
+                        console.log("geometry should be " + theCollection[libs]);
                         var obj = {
                             "type": "Feature",
                             "properties": {
