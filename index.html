@@ -184,7 +184,7 @@
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
                     rowLibraries.forEach(function (libs){
-                        console.log("geometry should be" + theCollection[libs].geometry);
+                        console.log("geometry should be " + libs);
                         var obj = {
                             "type": "Feature",
                             "properties": {
@@ -204,7 +204,7 @@
                                 "library": libs,
                                 "class": "book"
                             },
-                            "geometry": theCollection[libs].geometry
+                            "geometry": theCollection[libs]
                         }
                         theNewCollection.push(obj);
                     })
