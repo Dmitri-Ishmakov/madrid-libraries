@@ -24,10 +24,14 @@
         //Go ahead and grab the location of the search box
         var filterGroup = document.getElementById('filter-group');
         var layerIDs = [];
+        var theCollection = {};
         //Initialize the geoJSON as a type FeatureCollection so I can add features to it
         var geoJSON = {
                 "type": "FeatureCollection"
-            }
+            };
+        var geoJSONBooks = {
+                "type": "FeatureCollection"
+            };
 
            
             var transformRequest = (url, resourceType) => {
@@ -144,12 +148,11 @@
             // Initialize D3 to access your table
             function init() {
                 d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addLibraries);
+                d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vRE60W5m2AXGMp3ICTs6O_FxMIvhBt2nRc-bzKVAaVkIDfNl17fe17M55NrkjpoDng9swc2fiKawsfi/pub?output=csv', addPoints);
             }
 
             
             function addLibraries(data){
-                var theCollection = {};
-                
                 var thegeoJSONCollection = [];
                 //create a key/value pair for every library with it's GeoJSON feature
                 data.forEach(function (row){
@@ -158,7 +161,8 @@
                         "properties": {
                             "name": row.Name,
                             "address": row.Address,
-                            "municipality": row.Municipality
+                            "municipality": row.Municipality,
+                            "class": "library"
                         },
                         "geometry": {
                             "type": "Point",
@@ -173,27 +177,40 @@
                 geoJSON["features"] = thegeoJSONCollection;
             }
 
-            // create a function called addPoints that iterates through your table (row by row) to create the geoJSON
+
             function addPoints(data) {
-                var theCollection = [];
+                var theNewCollection = [];
                 //so go ahead and loop through each row
                 data.forEach(function (row) {
-                    var obj = {
-                        "type": "Feature",
-                        "properties": {
-                            "name": row.Name,
-                            "address": row.Address,
-                            "municipality": row.Municipality
-                        },
-                        "geometry": {
-                            "type": "Point",
-                            "coordinates": [Number(row.Longitude), Number(row.Latitude)]
+                    var rowLibraries = row.Libraries.split("///");
+                    rowLibraries.forEach(function (libs){
+                        var obj = {
+                            "type": "Feature",
+                            "properties": {
+                                "age": row.Age,
+                                "list": row.List,
+                                "title": row.Title,
+                                "author": row.Author,
+                                "illustrator": row.Illustrator,
+                                "press": row.Press,
+                                "city": row.City,
+                                "year": row.Year,
+                                "series": row.Series,
+                                "genre": row.Genre,
+                                "topic": row.Topic,
+                                "list": row.List,
+                                "summary": row.Summary,
+                                "library": libs,
+                                "class": "book"
+                            },
+                            "geometry": theCollection[row.Name].geometry
                         }
-                    }
-                    theCollection.push(obj);
+                        theNewCollection.push(obj);
+                    })
+                    
                 })
 
-                geoJSON["features"] = theCollection;
+                geoJSONBooks["features"] = theNewCollection;
             }
     </script>
 </body>
