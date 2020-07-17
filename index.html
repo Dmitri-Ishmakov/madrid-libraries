@@ -143,15 +143,40 @@
 
             // Initialize D3 to access your table
             function init() {
-                d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addPoints);
+                d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addLibraries);
             }
 
             
-            
+            function addLibraries(data){
+                var theCollection = {};
+                
+                var thegeoJSONCollection = [];
+                //create a key/value pair for every library with it's GeoJSON feature
+                data.forEach(function (row){
+                    var obj = {
+                        "type": "Feature",
+                        "properties": {
+                            "name": row.Name,
+                            "address": row.Address,
+                            "municipality": row.Municipality
+                        },
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [Number(row.Longitude), Number(row.Latitude)]
+                        }
+                    }
+                    theCollection[row.Name] = obj;
+                })
+                for(var key in theCollection){
+                    theCollection.push(thegeoJSONCollection[key]);
+                }
+                geoJSON["features"] = thegeoJSONCollection;
+            }
 
             // create a function called addPoints that iterates through your table (row by row) to create the geoJSON
             function addPoints(data) {
                 var theCollection = [];
+                //so go ahead and loop through each row
                 data.forEach(function (row) {
                     var obj = {
                         "type": "Feature",
