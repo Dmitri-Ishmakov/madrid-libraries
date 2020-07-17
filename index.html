@@ -148,8 +148,7 @@
             // Initialize D3 to access your table
             function init() {
                 d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vSWjjMYI1s6BRvFvDOESwiH-lrcIr_tRF2CU4t2t7RvI4Ho37gCStMz-h4SUaUOgwFuhynrZvVG_2qX/pub?output=csv', addLibraries)
-                setTimeout(
-                    d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vRE60W5m2AXGMp3ICTs6O_FxMIvhBt2nRc-bzKVAaVkIDfNl17fe17M55NrkjpoDng9swc2fiKawsfi/pub?output=csv', addPoints), 1000);
+                setTimeout( d3.csv('https://docs.google.com/spreadsheets/d/e/2PACX-1vRE60W5m2AXGMp3ICTs6O_FxMIvhBt2nRc-bzKVAaVkIDfNl17fe17M55NrkjpoDng9swc2fiKawsfi/pub?output=csv', addPoints), 1000);
             }
 
             
@@ -185,6 +184,7 @@
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
                     rowLibraries.forEach(function (libs){
+                        console.log("geometry should be" + theCollection[libs].geometry);
                         var obj = {
                             "type": "Feature",
                             "properties": {
@@ -204,9 +204,8 @@
                                 "library": libs,
                                 "class": "book"
                             },
-                            "geometry": theCollection[libs]
+                            "geometry": theCollection[libs].geometry
                         }
-                        console.log(theCollection[libs]);
                         theNewCollection.push(obj);
                     })
                     
