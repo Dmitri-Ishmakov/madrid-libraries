@@ -176,17 +176,20 @@
                 for(var key in theCollection){
                     thegeoJSONCollection.push(theCollection[key]);
                 }
+                console.log("TheGeoJSONCollection is ", thegeoJSONCollection);
                 geoJSON["features"] = thegeoJSONCollection;
             }
 
 
             function addPoints(data) {
                 var theNewCollection = [];
+                var count = 0;
                 //so go ahead and loop through each row
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
                     rowLibraries.forEach(function (libs){
                         if(theCollection[libs]){
+                        count = count + 1;
                         console.log("TheCollection[libs].geometry is" , theCollection[libs].geometry);
                         var obj = {
                             "type": "Feature",
@@ -212,7 +215,7 @@
                         theNewCollection.push(obj);
                         }
                     })
-                    
+                    console.log(count);
                 })
 
                 geoJSONBooks["features"] = theNewCollection;
