@@ -204,8 +204,9 @@
                                 "library": libs,
                                 "class": "book"
                             },
-                            "geometry": theCollection[row.Name].geometry
+                            "geometry": theCollection[row.Name]
                         }
+                        console.log(theCollection[row.Name]);
                         theNewCollection.push(obj);
                     })
                     
