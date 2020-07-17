@@ -185,7 +185,7 @@
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
                     rowLibraries.forEach(function (libs){
-                        if(theCollection[libs].geometry){
+                        if(theCollection[libs]){
                         console.log("TheCollection[libs].geometry is" , theCollection[libs].geometry);
                         var obj = {
                             "type": "Feature",
