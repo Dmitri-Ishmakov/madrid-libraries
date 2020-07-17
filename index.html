@@ -72,7 +72,7 @@
                 //Loop through the geoJSON adding each one to my map
                 geoJSONBooks.features.forEach(function (feature) {
                     //set symbol to whatever property I'm sorting by. Later should be able to sort by multiple properties at once
-                    var symbol = feature.properties['library'];
+                    var symbol = feature.properties['city'];
                     var layerID = 'poi-' + symbol;
                     map.on('click', layerID, function (e) {
                     var coordinates = e.features[0].geometry.coordinates.slice();
@@ -107,7 +107,7 @@
                                 'circle-color': 'purple'
                             },
                             //change the filter to whatever searching by
-                            'filter': ['==', 'library', symbol]
+                            'filter': ['==', 'city', symbol]
                         });
 
                         // Add checkbox and label elements for the layer.
