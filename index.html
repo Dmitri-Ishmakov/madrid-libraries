@@ -183,13 +183,12 @@
 
             function addPoints(data) {
                 var theNewCollection = [];
-                var count = 0;
                 //so go ahead and loop through each row
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
+                    console.log(rowLibraries);
                     rowLibraries.forEach(function (libs){
                         if(theCollection[libs]){
-                        count = count + 1;
                         console.log("TheCollection[libs].geometry is" , theCollection[libs].geometry);
                         var obj = {
                             "type": "Feature",
@@ -214,12 +213,13 @@
                         }
                         theNewCollection.push(obj);
                         }
+                        else{
+                            console.log("TheCollection[libs] ", theCollection[libs], "does not exist");
+                        }
                     })
-                    console.log(count);
                 })
 
                 geoJSONBooks["features"] = theNewCollection;
-                console.log("geoJSONBooks is", geoJSONBooks);
             }
     </script>
 </body>
