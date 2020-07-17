@@ -185,6 +185,7 @@
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("///");
                     rowLibraries.forEach(function (libs){
+                        if(theCollection[libs].geometry){
                         console.log("TheCollection[libs].geometry is" , theCollection[libs].geometry);
                         var obj = {
                             "type": "Feature",
@@ -208,6 +209,7 @@
                             "geometry": JSON.stringify(theCollection[libs])
                         }
                         theNewCollection.push(obj);
+                        }
                     })
                     
                 })
