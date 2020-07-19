@@ -17,6 +17,7 @@ body {
 	width: 24%;
 	right: 0%;
 	border: 3px solid black;
+	color: white;
 }
 .mapboxgl-popup {
 	padding-bottom: 5px;
