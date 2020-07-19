@@ -17,6 +17,7 @@
 
 <nav id="filter-group" class="filter-group"></nav>
 <div id="map"></div>
+<div id="popup-window"></div>
 
 <body>
 
@@ -46,7 +47,7 @@
             };
 
             //MAPBOXTOKEN REMOVE BEFORE PUBLISHING
-            mapboxgl.accessToken = 'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA'
+            mapboxgl.accessToken = 'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA';
             
             //initialize the map
             var map = new mapboxgl.Map({
@@ -76,7 +77,9 @@
                     var layerID = 'poi-' + symbol;
                     map.on('click', layerID, function (e) {
                     var coordinates = e.features[0].geometry.coordinates.slice();
-                    var name = e.features[0].properties.name;
+                    var name = e.features[0].properties.Name;
+
+                    popupWindow.innerHTML = Name;
                     
                     // Ensure that if the map is zoomed out such that multiple
                     // copies of the feature are visible, the popup appears
@@ -84,7 +87,7 @@
                     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
                     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
-                
+                    
                     //Add a popup for each point.
                     new mapboxgl.Popup()
                     .setLngLat(coordinates)
@@ -176,7 +179,6 @@
                 for(var key in theCollection){
                     thegeoJSONCollection.push(theCollection[key]);
                 }
-                console.log("TheGeoJSONCollection is ", thegeoJSONCollection);
                 geoJSON["features"] = thegeoJSONCollection;
             }
 
@@ -186,10 +188,8 @@
                 //so go ahead and loop through each row
                 data.forEach(function (row) {
                     var rowLibraries = row.Libraries.split("/// ");
-                    console.log(rowLibraries);
                     rowLibraries.forEach(function (libs){
                         if(theCollection[libs]){
-                        console.log("TheCollection[libs].geometry is" , theCollection[libs].geometry);
                         var obj = {
                             "type": "Feature",
                             "properties": {

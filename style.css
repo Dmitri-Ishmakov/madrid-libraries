@@ -5,13 +5,19 @@ body {
 }
 
 #map {
-	border-left: 1px solid #fff;
 	position: absolute;
-	width: 100%;
 	top: 0;
-	bottom: 0;
+	bottom: 7.5%;
+	width: 75%;
 }
-
+#popup-window {
+	position: absolute;
+	top: 0;
+	bottom: 0%;
+	width: 24%;
+	right: 0%;
+	border: 3px solid black;
+}
 .mapboxgl-popup {
 	padding-bottom: 5px;
 }
