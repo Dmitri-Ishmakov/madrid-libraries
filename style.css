@@ -89,9 +89,8 @@ body {
 	right: 10px;
 	z-index: 1;
 	border-radius: 3px;
-	width: 30px;
 	color: #fff;
-	float: left;
+	display: inline;
 }
 
 .filter-group input[type='checkbox']:first-child + label {
