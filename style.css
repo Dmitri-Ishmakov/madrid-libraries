@@ -91,6 +91,7 @@ body {
 	border-radius: 3px;
 	width: 30px;
 	color: #fff;
+	float: left;
 }
 
 .filter-group input[type='checkbox']:first-child + label {
