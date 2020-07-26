@@ -4,18 +4,33 @@ body {
 	padding: 0;
 }
 
-#map {
+#filter-group {
+	float: left;
+	border: 3px solid red;
 	position: absolute;
-	top: 0;
+	left: 10%;
+	top: 5%;
+	bottom: 80%;
+	width: 50%;
+	color: white;
+}
+#map {
+	float: left;
+	border: 3px solid blue;
+	position: absolute;
+	left: 10%;
+	top: 25%;
 	bottom: 7.5%;
-	width: 75%;
+	width: 50%;
+	color: white;
 }
 #popup-window {
+	float: left;
 	position: absolute;
-	top: 0;
-	bottom: 0%;
-	width: 24%;
-	right: 0%;
+	top: 5%;
+	bottom: 7.5%;
+	width: 25%;
+	right: 10%;
 	border: 3px solid black;
 	color: white;
 }
