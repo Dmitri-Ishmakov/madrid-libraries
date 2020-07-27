@@ -108,7 +108,7 @@ body {
 
 .filter-group input[type='checkbox'] + label {
 	background-color: #3386c0;
-	display: block;
+	display: inline;
 	cursor: pointer;
 	padding: 10px;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.25);
