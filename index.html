@@ -20,7 +20,13 @@
 <div id="popup-window"></div>
 
 <body>
-
+<script> var map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v11', //Choose a style: https://docs.mapbox.com/api/maps/#styles
+        center: [-3.5, 40.4], // starting position [lng, lat] set at Madrid currently
+        zoom: 9, // starting zoom
+        transformRequest: transformRequest
+    });</script>
 </body>
 
 </html>
