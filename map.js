@@ -22,15 +22,6 @@ var transformRequest = (url, resourceType) => {
 mapboxgl.accessToken =
 	'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA';
 
-//initialize the map
-var map = new mapboxgl.Map({
-	container: document.getElementById('map').toString(), // container id
-	style: 'mapbox://styles/mapbox/streets-v11', //Choose a style: https://docs.mapbox.com/api/maps/#styles
-	center: [ -3.5, 40.4 ], // starting position [lng, lat] set at Madrid currently
-	zoom: 9, // starting zoom
-	transformRequest: transformRequest
-});
-
 map.on('load', function() {
 	init();
 	var delayInMilliseconds = 2000; //Delay to allow the geoJSON to be populated. Fix by using Promises or an await in future build
