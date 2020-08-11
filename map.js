@@ -24,7 +24,7 @@ mapboxgl.accessToken =
 
 //initialize the map
 var map = new mapboxgl.Map({
-	container: 'map', // container id
+	container: document.getElementById('map'), // container id
 	style: 'mapbox://styles/mapbox/streets-v11', //Choose a style: https://docs.mapbox.com/api/maps/#styles
 	center: [ -3.5, 40.4 ], // starting position [lng, lat] set at Madrid currently
 	zoom: 9, // starting zoom
