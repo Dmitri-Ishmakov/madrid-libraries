@@ -81,7 +81,7 @@
                     }
 
                     //Add a popup for each point.
-                    new mapboxgl.Popup().setLngLat(coordinates).setHTML(name).addTo(map);
+                    new mapboxgl.Popup().setLngLat(coordinates).setHTML(popup).addTo(map);
                 });
 
                 // Add a layer for this symbol type if it hasn't been added already. This is what actually does the filtering
