@@ -25,6 +25,7 @@
     var layerIDs = [];
     var theCollection = {};
     var previousSelectedFeatureId = null;
+    var selectedFeatureId = null;
     //Initialize the geoJSON as a type FeatureCollection so I can add features to it
     var geoJSON = {
         type: 'FeatureCollection'
@@ -72,11 +73,12 @@
                 map.on('click', layerID, function (e) {
                     var coordinates = e.features[0].geometry.coordinates.slice();
                     var library = e.features[0].properties.library;
+                    selectedFeatureId = e.features[0].properties.id;
                     if(previousSelectedFeatureId != null){
                         map.setFeatureState({ source: 'place', id: previousSelectedFeatureId }, { selected: false });
                     }
                     map.setFeatureState({ source: 'place', id: selectedFeatureId }, { selected: true });
-                    previousSelectedFeatureId = selectedFeatureid;
+                    previousSelectedFeatureId = selectedFeatureId;
 
                     popupWindow.innerHTML = e.features[0].properties.popup;
 
