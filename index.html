@@ -20,6 +20,7 @@
 
 <body>
 <script> //Go ahead and grab the location of the search box
+    var idNumber =  0;
     var filterGroup = document.getElementById('filter-group');
     var popupWindow = document.getElementById('popup-window');
     var layerIDs = [];
@@ -161,6 +162,7 @@
             var obj = {
                 type: 'Feature',
                 properties: {
+                    id: idNumber,
                     name: row.Name,
                     address: row.Address,
                     municipality: row.Municipality,
@@ -173,10 +175,12 @@
                 }
             };
             theCollection[row.Name] = obj;
+            idNumber += 1;
         });
         for (var key in theCollection) {
             thegeoJSONCollection.push(theCollection[key]);
         }
+        
         geoJSON['features'] = thegeoJSONCollection;
     }
 
