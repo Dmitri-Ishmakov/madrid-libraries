@@ -24,6 +24,7 @@
     var popupWindow = document.getElementById('popup-window');
     var layerIDs = [];
     var theCollection = {};
+    var previouslySelectedFeatureID = null;
     //Initialize the geoJSON as a type FeatureCollection so I can add features to it
     var geoJSON = {
         type: 'FeatureCollection'
@@ -52,6 +53,7 @@
         transformRequest: transformRequest
     });
 
+
     map.on('load', function () {
         init();
         var delayInMilliseconds = 2000; //Delay to allow the geoJSON to be populated. Fix by using Promises or an await in future build
@@ -70,6 +72,11 @@
                 map.on('click', layerID, function (e) {
                     var coordinates = e.features[0].geometry.coordinates.slice();
                     var library = e.features[0].properties.library;
+                    if(preciouslySelectedFeatureId != null){
+                        map.setFeatureState({ source: 'place', id: previousSelectedFeatureId }, { selected: false });
+                    }
+                    map.setFeatureState({ source: 'place', id: selectedFeatureId }, { selected: true });
+                    previousSelectedFeatureId = selectedFeatureid;
 
                     popupWindow.innerHTML = e.features[0].properties.popup;
 
@@ -96,7 +103,12 @@
                         },
                         paint: {
                             'circle-radius': 9,
-                            'circle-color': 'purple'
+                            'circle-color': [
+                                'case',
+                                ['==', ['feature-state', 'selected'], true],
+                                rgba(216, 28, 207, 1),
+                                rgba(216, 73, 28, 1)
+                            ]
                         },
                         //change the filter to whatever searching by
                         filter: ['==', 'city', symbol]
