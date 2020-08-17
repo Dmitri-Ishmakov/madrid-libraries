@@ -75,6 +75,7 @@
                     var coordinates = e.features[0].geometry.coordinates.slice();
                     var library = e.features[0].properties.library;
                     selectedFeatureId = e.features[0].properties.id;
+                    console.log(selectedFeatureId);
                     if(previousSelectedFeatureId != null){
                         map.setFeatureState({ source: 'places', id: previousSelectedFeatureId }, { selected: false });
                     }
