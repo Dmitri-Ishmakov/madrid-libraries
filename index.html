@@ -195,6 +195,7 @@
                     var obj = {
                         type: 'Feature',
                         properties: {
+                            id: idNumber,
                             age: row.Age,
                             list: row.List,
                             title: row.Title,
@@ -214,6 +215,7 @@
                         },
                         geometry: theCollection[libs].geometry
                     };
+                    idNumber += 1;
                     theNewCollection.push(obj);
                 } else {
                     console.log('TheCollection[libs] ', theCollection[libs], 'does not exist');
