@@ -80,9 +80,8 @@
                         coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                     }
 
-                    console.log(e.features[0].properties.popup);
                     //Add a popup for each point.
-                    new mapboxgl.Popup().setLngLat(coordinates).setHTML(e.features[0].properties.popup).addTo(map);
+                    new mapboxgl.Popup().setLngLat(coordinates).setHTML().addTo(map);
                 });
 
                 // Add a layer for this symbol type if it hasn't been added already. This is what actually does the filtering
