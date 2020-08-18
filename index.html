@@ -76,7 +76,7 @@
                     var library = e.features[0].properties.library;
                     selectedFeatureId = e.features[0].properties.id;
                     console.log("selected feature id is " + selectedFeatureId + "and previous id is " + previousSelectedFeatureId);
-                    if(previousSelectedFeatureId != null){
+                    if(previousSelectedFeatureId != null && previousSelectedFeatureId != selectedFeatureId){
                         map.setFeatureState({ source: 'places', id: previousSelectedFeatureId }, { selected: false });
                     }
                     map.setFeatureState({ source: 'places', id: selectedFeatureId }, { selected: true });
