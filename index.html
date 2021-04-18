@@ -1,231 +1,59 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Madrid Map of Libraries</title>
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css" rel="stylesheet" />
-    <script src='https://d3js.org/d3.v4.min.js'></script>
-    <script src='https://npmcdn.com/csv2geojson@latest/csv2geojson.js'></script>
-    <link rel="stylesheet" href="style.css">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>JS Issue Tracker</title>
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type = text/javascript src="main.js"></script>
+    <script src="bundle.js"></script>
 </head>
 
-<nav id="filter-group" class="filter-group"></nav>
-<div id="map"></div>
-<div id="popup-window"></div>
+<body">
+    <div class="container">
+        <h1>Madrid Libraries Project <small></small></h1>
+        <div class="jumbotron">
+            <h3>Which theme are we searching for</h3>
+            <form id="issueInputForm">
+                <div class="form-group">
+                    <label for="issueDescInput">Search</label>
+                    <input type="text" class="form-control" id="sqlSearchTerm" placeholder="Describe the issue ...">
+                </div>
+                <div class="form-group">
+                    <label for="issueDescInput">Theme To Search</label>
+                    <select class="form-control" id="issueSeverityInput">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="executeSearch()">Search</button>
+                <div id="Myoutput">Default just so I can see it</div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div id="issuesList">
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <p>By Father Pumpkin</p>
+        </div>
+    </div>
 
-<body>
-<script> //Go ahead and grab the location of the search box
-    var idNumber =  0;
-    var filterGroup = document.getElementById('filter-group');
-    var popupWindow = document.getElementById('popup-window');
-    var layerIDs = [];
-    var theCollection = {};
-    var previousSelectedFeatureId = null;
-    var selectedFeatureId = null;
-    //Initialize the geoJSON as a type FeatureCollection so I can add features to it
-    var geoJSON = {
-        type: 'FeatureCollection'
-    };
-    var geoJSONBooks = {
-        type: 'FeatureCollection'
-    };
-
-    var transformRequest = (url, resourceType) => {
-        var isMapboxRequest = url.slice(8, 22) === 'api.mapbox.com' || url.slice(10, 26) === 'tiles.mapbox.com';
-        return {
-            url: isMapboxRequest ? url.replace('?', '?pluginName=sheetMapper&') : url
-        };
-    };
-
-    //MAPBOXTOKEN REMOVE BEFORE PUBLISHING
-    mapboxgl.accessToken =
-        'pk.eyJ1IjoiZmF0aGVycHVtcGtpbiIsImEiOiJja2Nqb3dwaXYwdmYwMnhtaGp1aHhmc2g3In0.kB0nwtcvxTrMf8t-BGIjVA';
-
-    //initialize the map
-    var map = new mapboxgl.Map({
-        container: 'map', // container id
-        style: 'mapbox://styles/mapbox/streets-v11', //Choose a style: https://docs.mapbox.com/api/maps/#styles
-        center: [-3.5, 40.4], // starting position [lng, lat] set at Madrid currently
-        zoom: 9, // starting zoom
-        transformRequest: transformRequest
-    });
-
-
-    map.on('load', function () {
-        init();
-        var delayInMilliseconds = 2000; //Delay to allow the geoJSON to be populated. Fix by using Promises or an await in future build
-
-        setTimeout(function () {
-            map.addSource('places', {
-                type: 'geojson',
-                data: geoJSONBooks
-            });
-
-            //Loop through the geoJSON adding each one to my map
-            geoJSONBooks.features.forEach(function (feature) {
-                //set symbol to whatever property I'm sorting by. Later should be able to sort by multiple properties at once
-                var symbol = feature.properties['city'];
-                var layerID = 'poi-' + symbol;
-                map.on('click', layerID, function (e) {
-                    var coordinates = e.features[0].geometry.coordinates.slice();
-                    var library = e.features[0].properties.library;
-                    selectedFeatureId = e.features[0].properties.id;
-                    if(previousSelectedFeatureId != null && previousSelectedFeatureId != selectedFeatureId){
-                        console.log("selected feature id is " + selectedFeatureId + "and previous id is " + previousSelectedFeatureId);
-                        map.setFeatureState({ source: 'places', id: previousSelectedFeatureId }, { selected: false });
-                    }
-                    map.setFeatureState({ source: 'places', id: selectedFeatureId }, { selected: true });
-                    previousSelectedFeatureId = selectedFeatureId;
-
-                    popupWindow.innerHTML = e.features[0].properties.popup;
-
-                    // Ensure that if the map is zoomed out such that multiple
-                    // copies of the feature are visible, the popup appears
-                    // over the copy being pointed to.
-                    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-                    }
-
-                    //Add a popup for each point.
-                    new mapboxgl.Popup().addTo(map);
-                });
-
-                // Add a layer for this symbol type if it hasn't been added already. This is what actually does the filtering
-                if (!map.getLayer(layerID)) {
-                    map.addLayer({
-                        id: layerID,
-                        type: 'circle',
-                        source: 'places',
-                        layout: {
-                            // make layer visible by default
-                            visibility: 'none'
-                        },
-                        paint: {
-                            'circle-radius': 9,
-                            'circle-color': [
-                                'case',
-                                ['boolean', ['feature-state', 'selected'], true],
-                                "#D8491C",
-                                "#CD1CD8"
-                            ]
-                        },
-                        //change the filter to whatever searching by
-                        filter: ['==', 'city', symbol]
-                    });
-
-                    // Add checkbox and label elements for the layer.
-                    var input = document.createElement('input');
-                    input.type = 'checkbox';
-                    input.id = layerID;
-                    input.checked = false;
-                    filterGroup.appendChild(input);
-
-                    var label = document.createElement('label');
-                    label.setAttribute('for', layerID);
-                    label.textContent = symbol;
-                    filterGroup.appendChild(label);
-
-                    //When the checkbox changes, update the visibility of the layer.
-                    input.addEventListener('change', function (e) {
-                        map.setLayoutProperty(layerID, 'visibility', e.target.checked ? 'visible' : 'none');
-                        var j;
-                        // remove the unchecked layer from layerIDs
-                        for (var i = 0; i < layerIDs.length; i++) {
-                            if (layerIDs[i] == layerID) {
-                                j = i;
-                            }
-                        }
-                        e.target.checked ? layerIDs.push(layerID) : layerIDs.splice(j, 1);
-                        console.log(layerIDs);
-                    });
-                }
-            });
-        }, delayInMilliseconds);
-    });
-
-    // Initialize D3 to access your table
-    function init() {
-        d3.csv('./libraries.csv', addLibraries);
-        setTimeout(function () {
-            d3.csv('./books.csv', addPoints);
-        }, 1000);
-    }
-
-    function addLibraries(data) {
-        var thegeoJSONCollection = [];
-        //create a key/value pair for every library with it's GeoJSON feature
-        data.forEach(function (row) {
-            var obj = {
-                type: 'Feature',
-                properties: {
-                    id: idNumber,
-                    name: row.Name,
-                    address: row.Address,
-                    municipality: row.Municipality,
-                    class: 'library',
-                    popup: '<h1>Name</h1><p>'+  row.Name + '</p><h1>Address</h1><p>' + row.Address + '</p><h1>Municipality</h1><p>' + row.Municipality + '</p>'
-                },
-                geometry: {
-                    type: 'Point',
-                    coordinates: [Number(row.Longitude), Number(row.Latitude)]
-                }
-            };
-            theCollection[row.Name] = obj;
-            idNumber += 1;
-        });
-        for (var key in theCollection) {
-            thegeoJSONCollection.push(theCollection[key]);
-        }
-        
-        geoJSON['features'] = thegeoJSONCollection;
-    }
-
-    function addPoints(data) {
-        var theNewCollection = [];
-        //so go ahead and loop through each row
-        data.forEach(function (row) {
-            var rowLibraries = row.Libraries.split('/// ');
-            rowLibraries.forEach(function (libs) {
-                if (theCollection[libs]) {
-                    var obj = {
-                        type: 'Feature',
-                        properties: {
-                            id: idNumber,
-                            age: row.Age,
-                            list: row.List,
-                            title: row.Title,
-                            author: row.Author,
-                            illustrator: row.Illustrator,
-                            press: row.Press,
-                            city: row.City,
-                            year: row.Year,
-                            series: row.Series,
-                            genre: row.Genre,
-                            topic: row.Topic,
-                            list: row.List,
-                            summary: row.Summary,
-                            library: libs,
-                            class: 'book',
-                            popup: theCollection[libs].properties.popup
-                        },
-                        geometry: theCollection[libs].geometry
-                    };
-                    idNumber += 1;
-                    theNewCollection.push(obj);
-                } else {
-                    console.log('TheCollection[libs] ', theCollection[libs], 'does not exist');
-                }
-            });
-        });
-
-        geoJSONBooks['features'] = theNewCollection;
-    }
-</script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://chancejs.com/chance.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
