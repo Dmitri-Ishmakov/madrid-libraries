@@ -27,7 +27,7 @@ $conn = new mysqli("localhost", "root", "t8G54prZ@Nfr", "madrid_libraries_projec
 
             if($count>0){
                 //do things, not empty
-                while ($row = mysqli_fetch_assoc($res)) {
+                while($row=mysqli_fetch_assoc($res)){
                     $author_id = $row['author_id'];
                     $first_name = $row['first_name'];
                     $last_name = $row['last_name'];

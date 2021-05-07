@@ -1,46 +1,43 @@
-<html>
+<?php include('./partials/menu.php'); ?>
 
-<head>
-    <title>Madrid Libraries Project - Mitchel and James Smith</title>
+<!-- Main Section Starts -->
+<div class="main-content">
+    <div class="wrapper">
+        <form action="search.php" method="post">
+            Search Term: <select name="themeToSearch">
 
-    <link rel="stylesheet" href="../css/admin.css">
-</head>
+                <name="theme" <?php
+                                mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+                                $conn = new mysqli("localhost", "root", "t8G54prZ@Nfr", "madrid_libraries_project");
 
-<body>
-    <?php include('./partials/menu.php'); ?>
+                                //set up the query
+                                $sql = "SELECT DISTINCT Theme_1 as themes FROM books 
+                UNION
+                SELECT DISTINCT Theme_2 as themes FROM books
+                UNION
+                SELECT DISTINCT Theme_3 as themes FROM books
+                UNION
+                SELECT DISTINCT Theme_4 as themes FROM books;";
+                                //execute the query
+                                $res = mysqli_query($conn, $sql);
+                                $count = mysqli_num_rows($res);
 
-    <!-- Main Section Starts -->
-    <div class="main-content">
-        <div class="wrapper">
-            <h1>DASHBOARD</h1>
+                                echo "<select name='theme'>";
+                                if ($count > 0) {
+                                    while ($row = mysqli_fetch_assoc($res)) {
+                                        echo "<option value='" . $row['themes'] . "'>" . $row['themes'] . "</option>";
+                                    }
+                                    echo "</select>";
+                                }
 
-            <div class="col-4 text-center">
-                <h1>5</h1>
-                <br />
-                Categories
-            </div>
-            <div class="col-4 text-center">
-                <h1>5</h1>
-                <br />
-                Categories
-            </div>
-            <div class="col-4 text-center">
-                <h1>5</h1>
-                <br />
-                Categories
-            </div>
-            <div class="col-4 text-center">
-                <h1>5</h1>
-                <br />
-                Categories
-            </div>
+                                ?>>
+            </select><br>
+            <input type="submit">
+        </form>
 
-            <div class="clearfix"></div>
-        </div>
+
     </div>
-    <!-- Main Section ENDS -->
+</div>
+<!-- Main Section ENDS -->
 
-    <?php include('./partials/footer.php'); ?>
-</body>
-
-</html>
+<?php include('./partials/footer.php'); ?>

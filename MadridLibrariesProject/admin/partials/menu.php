@@ -1,5 +1,5 @@
 <!-- Menu Section Starts -->
-<html>
+<html lang="sp">
 
 <head>
     <title>Madrid Libraries Project - Mitchel and James Smith</title>

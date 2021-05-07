@@ -24,6 +24,11 @@
 	float: none;
 	clear: both;
 }
+
+.right {
+	float: right;
+}
+
 .tbl-full {
 	width: 100%;
 }
