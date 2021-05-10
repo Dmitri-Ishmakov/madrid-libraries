@@ -4,7 +4,7 @@
 <head>
     <title>Madrid Libraries Project - Mitchel and James Smith</title>
 
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="./css/admin.css">
 </head>
 
 <body>
@@ -22,44 +22,56 @@
     </div>
     <!-- Menu Section ENDS -->
 
+    <?php
+    $conn = new mysqli("localhost", "root", "t8G54prZ@Nfr", "madrid_libraries_project"); ?>
+
     <!-- Main Section Starts -->
     <div class="main-content">
         <div class="wrapper">
-            <form action="search.php" method="post">
-                Search Term: <select name="themeToSearch">
+            <h1>Manage Authors</h1>
+            <br /><br /><br />
+            <!-- Button to add author-->
+            <a href="#" class="btn-primary">Add Author</a>
+            <br /><br /><br />
+            <table class="tbl-full">
+                <tr>
+                    <th>Author_ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Actions</th>
+                </tr>
+                <?php
 
-                    <name="theme" <?php
-                                    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-                                    $conn = new mysqli("localhost", "root", "t8G54prZ@Nfr", "madrid_libraries_project");
+                //set up the query
+                $sql = "SELECT * FROM authors";
+                //execute the query
+                $res = mysqli_query($conn, $sql);
+                //count the rows
+                $count = mysqli_num_rows($res);
 
-                                    //set up the query
-                                    $sql = "SELECT DISTINCT Theme_1 as themes FROM books 
-                UNION
-                SELECT DISTINCT Theme_2 as themes FROM books
-                UNION
-                SELECT DISTINCT Theme_3 as themes FROM books
-                UNION
-                SELECT DISTINCT Theme_4 as themes FROM books;";
-                                    //execute the query
-                                    $res = mysqli_query($conn, $sql);
-                                    $count = mysqli_num_rows($res);
+                if ($count > 0) {
+                    //do things, not empty
+                    while ($row = mysqli_fetch_assoc($res)) {
+                        $author_id = $row['author_id'];
+                        $first_name = $row['first_name'];
+                        $last_name = $row['last_name'];
 
-                                    echo "<select name='theme'>";
-                                    if ($count > 0) {
-                                        while ($row = mysqli_fetch_assoc($res)) {
-                                            echo "<option value='" . $row['themes'] . "'>" . $row['themes'] . "</option>";
-                                        }
-                                        echo "</select>";
-                                    }
+                ?>
+                <tr>
+                    <td><?php echo $author_id ?></td>
+                    <td><?php echo $first_name ?></td>
+                    <td><?php echo $last_name ?></td>
+                    <td><a href="#" class="btn-secondary">Update Author</a><a href="#" class="btn-tertiary">Delete
+                            Author</a></td>
+                </tr>
+                <?php
+                    }
+                } ?>
 
-                                    ?>>
-                </select><br>
-                <input type="submit">
-            </form>
-
+            </table>
 
         </div>
     </div>
-    <!-- Main Section ENDS -->
+    <!-- Main Section Starts -->
 
     <?php include('./partials/footer.php'); ?>
