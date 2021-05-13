@@ -23,7 +23,7 @@
             authors.last_name as aLastName,
             illustrators.first_name as iFirstName,
             illustrators.last_name as iLastName,
-            Concat_WS(',', Theme_1, Theme_2, Theme_3, Theme_4) AS Themes 
+            Concat_WS(', ', Theme_1, Theme_2, Theme_3, Theme_4) AS Themes 
             FROM books
             INNER JOIN authors ON books.author_id=authors.author_id
             INNER JOIN illustrators ON books.illustrator_id=illustrators.illustrator_id
